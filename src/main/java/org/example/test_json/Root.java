@@ -1,12 +1,10 @@
 package org.example.test_json;
 
-import org.example.test_json.People;
-
 import java.util.List;
 
 public class Root {
     private String name;
-    private List<People> people;
+    private List<Expressions> expressions;
 
     public String getName() {
         return name;
@@ -16,19 +14,19 @@ public class Root {
         this.name = name;
     }
 
-    public List<People> getPeople() {
-        return people;
+    public List<Expressions> getExpressions() {
+        return expressions;
     }
 
-    public void setPeople(List<People> people) {
-        this.people = people;
+    public void setExpressions(List<Expressions> expressions) {
+        this.expressions = expressions;
     }
 
     @Override
     public String toString() {
         return "Root{" +
                 "name='" + name + '\'' +
-                ", people=" + people +
+                ", expressions=" + expressions +
                 '}';
     }
 }

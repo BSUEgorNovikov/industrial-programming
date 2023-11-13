@@ -10,133 +10,153 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExpressionsCalculator {
-    public Vector<Integer> calculateExpressions(List<String> gainData)
-    {
-        Vector<Integer> vectorOfResults = new Vector<>();
-        int numberOfExpressions = gainData.size();
+    public static double calculateExpression(String expression) {
+        Stack<Double> numbers = new Stack<>();
+        Stack<Character> operators = new Stack<>();
+        int i = 0;
 
-        for (int i = 0; i < numberOfExpressions; i++)
-        {
-            int currentNumber = 0;
-            char currentOperator = '+';
-            int stringLength = gainData.get(i).length();
-            Stack<Integer> stackOfNumbers = new Stack<>();
-
-            for (int j = 0; j < stringLength; j++)
-            {
-                char currentChar = gainData.get(i).charAt(j);
-
-                if (Character.isDigit(currentChar))
-                    currentNumber = (currentNumber * 10) + (currentChar - '0');
-
-                if (!Character.isDigit(currentChar) && currentChar != ' ' || j == stringLength - 1)
-                {
-                    if (currentOperator == '+')
-                    {
-                        stackOfNumbers.push(currentNumber);
-                    }
-                    else if (currentOperator == '-')
-                    {
-                        stackOfNumbers.push(-currentNumber);
-                    }
-                    else if (currentOperator == '*')
-                    {
-                        stackOfNumbers.push(stackOfNumbers.pop() * currentNumber);
-                    }
-                    else if (currentOperator == '/')
-                    {
-                        stackOfNumbers.push(stackOfNumbers.pop() / currentNumber);
-                    }
-
-                    currentNumber = 0;
-                    currentOperator = currentChar;
+        while (i < expression.length()) {
+            char ch = expression.charAt(i);
+            if (ch == ' ') {
+                i++;
+                continue;
+            } else if (Character.isDigit(ch) || ch == '.') {
+                StringBuilder numBuilder = new StringBuilder();
+                while (i < expression.length() && (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
+                    numBuilder.append(expression.charAt(i));
+                    i++;
                 }
+                double number = Double.parseDouble(numBuilder.toString());
+                numbers.push(number);
+            } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+                while (!operators.isEmpty() && !hasPrecedence(ch, operators.peek()) && !operators.peek().equals('(')) {
+                    double operand2 = numbers.pop();
+                    double operand1 = numbers.pop();
+                    char op = operators.pop();
+                    double result = performOperation(op, operand1, operand2);
+                    numbers.push(result);
+                }
+                operators.push(ch);
+                i++;
+            } else if (ch == '(') {
+                operators.push(ch);
+                i++;
+            } else if (ch == ')') {
+                while (!operators.isEmpty() && operators.peek() != '(') {
+                    double operand2 = numbers.pop();
+                    double operand1 = numbers.pop();
+                    char op = operators.pop();
+                    double result = performOperation(op, operand1, operand2);
+                    numbers.push(result);
+                }
+                operators.pop();
+                i++;
+            } else {
+                throw new IllegalArgumentException("Недопустимый символ: " + ch);
             }
-
-            int result = 0;
-            while (!stackOfNumbers.isEmpty())
-            {
-                result += stackOfNumbers.pop();
-            }
-
-            vectorOfResults.add(result);
         }
 
-        return vectorOfResults;
+        while (!operators.isEmpty()) {
+            double operand2 = numbers.pop();
+            double operand1 = numbers.pop();
+            char op = operators.pop();
+            double result = performOperation(op, operand1, operand2);
+            numbers.push(result);
+        }
+
+        return numbers.pop();
     }
 
-    public Vector<Integer> externalLibCalculateExpressions(List<String> gainData) {
-        Vector<Integer> resultVector = new Vector<>();
+    private static boolean hasPrecedence(char operator1, char operator2) {
+        if ((operator1 == '*' || operator1 == '/') && (operator2 == '+' || operator2 == '-')) {
+            return true;
+        }
+        return false;
+    }
 
-        for(int i = 0; i < gainData.size(); i++) {
+    private static double performOperation(char operator, double operand1, double operand2) {
+        switch (operator) {
+            case '+':
+                return operand1 + operand2;
+            case '-':
+                return operand1 - operand2;
+            case '*':
+                return operand1 * operand2;
+            case '/':
+                if (operand2 == 0) {
+                    throw new ArithmeticException("Деление на ноль!");
+                }
+                return operand1 / operand2;
+        }
+        throw new IllegalArgumentException("Неизвестный оператор: " + operator);
+    }
+
+    public Vector<Double> externalLibCalculateExpressions(List<String> gainData) {
+        Vector<Double> resultVector = new Vector<>();
+
+        for (int i = 0; i < gainData.size(); i++) {
             Expression expression = new ExpressionBuilder(gainData.get(i)).build();
-            int result = (int)expression.evaluate();
+            double result = expression.evaluate();
             resultVector.add(result);
         }
 
         return resultVector;
     }
 
-    public Vector<Integer> regexCalculateExpressions(List<String> gainData) {
-        Vector<Integer> vectorOfResults = new Vector<>();
-        Stack<Integer> stackOfNumbers = new Stack<>();
-        int numberOfExpressions = gainData.size();
+    public Double regexCalculateExpression(String expression) {
+        Stack<Double> numbers = new Stack<>();
+        Stack<String> operators = new Stack<>();
 
-        Pattern numberPattern = Pattern.compile("\\d+(\\.\\d+)?");
-        Pattern operatorPattern = Pattern.compile("[+\\-*/()]");
-        for (int i = 0; i < numberOfExpressions; i++)
-        {
-            Vector<Integer> numbers = new Vector<>();
-            Vector<Character> operators = new Vector<>();
-
-            if(Character.isDigit(gainData.get(i).charAt(0))) {
-                operators.add('+');
-            }
-
-            Matcher matcher = numberPattern.matcher(gainData.get(i));
-            while (matcher.find()) {
-                int operand = Integer.parseInt(matcher.group());
-                numbers.add(operand);
-            }
-            matcher = operatorPattern.matcher(gainData.get(i));
-            while (matcher.find()) {
-                char operator = matcher.group().charAt(0);
-                operators.add(operator);
-            }
-
-            for(int j = 0; j < numbers.size(); j++) {
-                char currentOperator = operators.get(j);
-                int currentNumber = numbers.get(j);
-
-                switch (currentOperator) {
-                    case '+': {
-                        stackOfNumbers.push(currentNumber);
-                        break;
-                    }
-                    case '-': {
-                        stackOfNumbers.push(-currentNumber);
-                        break;
-                    }
-                    case '*': {
-                        stackOfNumbers.push(stackOfNumbers.pop() * currentNumber);
-                        break;
-                    }
-                    case '/': {
-                        stackOfNumbers.push(stackOfNumbers.pop() / currentNumber);
-                        break;
-                    }
+        int i = 0;
+        while (i < expression.length()) {
+            String ch = Character.toString(expression.charAt(i));
+            if (ch.equals(" ")) {
+                i++;
+                continue;
+            } else if (ch.matches("\\d+(\\.\\d+)?") || ch.equals(".")) {
+                StringBuilder numBuilder = new StringBuilder();
+                while (i < expression.length() && (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
+                    numBuilder.append(expression.charAt(i));
+                    i++;
                 }
+                double number = Double.parseDouble(numBuilder.toString());
+                numbers.push(number);
+            } else if (ch.matches("[+\\-*/]")) {
+                while (!operators.isEmpty() && !hasPrecedence(ch.charAt(0), operators.peek().charAt(0)) && !operators.peek().equals("(")) {
+                    double operand2 = numbers.pop();
+                    double operand1 = numbers.pop();
+                    String op = operators.pop();
+                    double result = performOperation(op.charAt(0), operand1, operand2);
+                    numbers.push(result);
+                }
+                operators.push(ch);
+                i++;
+            } else if (ch.equals("(")) {
+                operators.push(ch);
+                i++;
+            } else if (ch.equals(")")) {
+                while (!operators.isEmpty() && operators.peek().charAt(0) != '(') {
+                    double operand2 = numbers.pop();
+                    double operand1 = numbers.pop();
+                    String op = operators.pop();
+                    double result = performOperation(op.charAt(0), operand1, operand2);
+                    numbers.push(result);
+                }
+                operators.pop();
+                i++;
+            } else {
+                throw new IllegalArgumentException("Недопустимый символ: " + ch);
             }
-
-            int result = 0;
-            while (!stackOfNumbers.isEmpty())
-            {
-                result += stackOfNumbers.pop();
-            }
-
-            vectorOfResults.add(result);
         }
 
-        return vectorOfResults;
+        while (!operators.isEmpty()) {
+            double operand2 = numbers.pop();
+            double operand1 = numbers.pop();
+            String op = operators.pop();
+            double result = performOperation(op.charAt(0), operand1, operand2);
+            numbers.push(result);
+        }
+
+        return numbers.pop();
     }
 }

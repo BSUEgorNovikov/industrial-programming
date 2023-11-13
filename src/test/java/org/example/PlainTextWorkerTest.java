@@ -14,7 +14,8 @@ class PlainTextWorkerTest {
         List<String> expextedList = new ArrayList<>();
         expextedList.add("4 + 3 * 4");
         expextedList.add("3 + 2 - 7");
-        expextedList.add("4 * 5 - 6 / 3");
+        expextedList.add("4 * (5 - 6) / 3");
+        expextedList.add("0.56 + 0.2 * 4");
 
         PlainTextWorker ptw = new PlainTextWorker("input.txt");
         List<String> actualList = ptw.readingFromPlain("input.txt");

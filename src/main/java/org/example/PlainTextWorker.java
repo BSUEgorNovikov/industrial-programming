@@ -59,17 +59,11 @@ public class PlainTextWorker {
         return gainData;
     }
 
-    public void writeInPlain(Vector<Integer> integerVector)
+    public void writeInPlain(String outFileName, String integerVector)
     {
-        try(FileWriter fileWriter = new FileWriter("output.txt"))
+        try(FileWriter fileWriter = new FileWriter(outFileName))
         {
-            fileWriter.write("Результаты:\n");
-
-            int sizeOfIntVector = integerVector.size();
-            for(int i = 0; i < sizeOfIntVector; i++)
-            {
-                fileWriter.write((i + 1) + ". " + integerVector.get(i) + "\n");
-            }
+            fileWriter.write(integerVector);
         }
         catch (IOException exp)
         {
