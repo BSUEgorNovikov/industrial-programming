@@ -2,6 +2,7 @@ package org.example;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,13 +26,13 @@ public class aesCipher {
         }
     }
 
-    public static String encrypt(final String strToEncrypt, final String secret) {
+    public static byte[] encrypt(final String strToEncrypt, final String secret) {
         try {
             setKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             return Base64.getEncoder()
-                    .encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+                    .encode(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
         } catch (Exception e) {
             System.out.println("Error while encrypting: " + e.toString());
         }
