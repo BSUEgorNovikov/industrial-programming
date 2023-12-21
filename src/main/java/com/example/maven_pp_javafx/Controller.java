@@ -96,7 +96,6 @@ public class Controller {
             }
 
             ioFileInfo.inputFileName = inputFileNameID.getText();
-            ioFileInfo.inputFileName += "." + ioFileInfo.inputFileData;
 
             ioFileInfo.outputFileName = outputFileNameID.getText();
 

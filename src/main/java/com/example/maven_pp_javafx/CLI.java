@@ -92,7 +92,6 @@ public class CLI {
         file.inputFileName = in.next();
 
         file.inputFileName += '.';
-        file.inputFileName += file.inputFileData;
 
         System.out.println("Выберите подходящий вариант архивации/шифрования для входного файла:\n" +
                 "\t1.Только заархивирован\n" +

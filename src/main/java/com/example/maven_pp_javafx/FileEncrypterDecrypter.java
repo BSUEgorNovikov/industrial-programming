@@ -8,8 +8,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.*;
 
 public class FileEncrypterDecrypter {
     private static SecretKey secretKey;
@@ -25,13 +24,15 @@ public class FileEncrypterDecrypter {
             throw new RuntimeException(e);
         }
     }
-    void encrypt(String content, String fileName) throws InvalidKeyException, IOException {
+    void encrypt(String inFileName, String content, String outfileName) throws InvalidKeyException, IOException {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] iv = cipher.getIV();
 
-        try (FileOutputStream fileOut = new FileOutputStream(fileName + ".enc");
+        try (FileOutputStream fileOut = new FileOutputStream(outfileName + ".enc");
              CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher)) {
             fileOut.write(iv);
+
+            cipherOut.write(inFileName.getBytes());
             cipherOut.write(content.getBytes());
         }
     }
@@ -60,5 +61,35 @@ public class FileEncrypterDecrypter {
 
         }
         return content;
+    }
+
+    void encryptInput(String inFileName, String inFileData) throws InvalidKeyException, IOException {
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] iv = cipher.getIV();
+
+        try (FileOutputStream fileOut = new FileOutputStream(inFileName + ".enc");
+             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher)) {
+            fileOut.write(iv);
+
+            cipherOut.write(inFileName.getBytes());
+            cipherOut.write(".".getBytes());
+            cipherOut.write(inFileData.getBytes());
+            cipherOut.write("SEPARATOR".getBytes());
+
+            try
+            {
+                Scanner sc = new Scanner(new File(inFileName + "." + inFileData));
+
+                while(sc.hasNext())
+                {
+                    String tmpLine = sc.nextLine();
+                    cipherOut.write(tmpLine.getBytes());
+                }
+            }
+            catch (IOException e)
+            {
+                System.out.println("Error" + e);
+            }
+        }
     }
 }
