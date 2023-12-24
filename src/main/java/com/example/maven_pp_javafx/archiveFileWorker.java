@@ -17,7 +17,8 @@ public class archiveFileWorker {
                 name = entry.getName(); // получим название файла
                 System.out.printf("File name: %s \n", name);
 
-                unpackedFile = "new_" + name;
+                //unpackedFile = "new_" + name;
+                unpackedFile = name;
                 // распаковка
                 FileOutputStream fout = new FileOutputStream(unpackedFile);
                 for (int c = zin.read(); c != -1; c = zin.read()) {

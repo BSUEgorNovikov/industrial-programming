@@ -32,22 +32,22 @@ public class Main
           SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
           FileEncrypterDecrypter cipher = new FileEncrypterDecrypter(secretKey, "AES/CBC/PKCS5Padding");
 
-          cipher.encryptInput("json_input_to_enc", "json");
-          String content = cipher.decrypt("json_input_to_enc.enc");
+          cipher.encryptInputFile("zip_enc_json_input", "json");
+          String content = cipher.decrypt("zip_enc_json_input.enc");
           System.out.println(content);
 
 
-          String[] file_name_content = content.split("SEPARATOR");
+//          String[] file_name_content = content.split("SEPARATOR");
 
 
 //          FileOutputStream fout = new FileOutputStream("test_file_enc_dec.txt");
 //          FileWriter fileWriter = new FileWriter("test_file_enc_dec.txt");
 //          fout.write("[eq");
 
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter("json_input_to_enc.json"))) {
-                      writer.write(file_name_content[1] + "\n");
-          } catch (IOException e) {
-                e.printStackTrace();
-          }
+//          try (BufferedWriter writer = new BufferedWriter(new FileWriter("json_input_to_enc.json"))) {
+//                      writer.write(file_name_content[1] + "\n");
+//          } catch (IOException e) {
+//                e.printStackTrace();
+//          }
     }
 }

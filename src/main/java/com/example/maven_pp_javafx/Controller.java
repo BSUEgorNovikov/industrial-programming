@@ -2,6 +2,7 @@ package com.example.maven_pp_javafx;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
@@ -50,7 +51,9 @@ public class Controller {
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws NoSuchAlgorithmException {
+        programManager = new ProgramManager();
+
         processButton.setOnAction(event -> {
             RadioButton selectedInputType = (RadioButton) inputDataType.getSelectedToggle();
             if(selectedInputType != null) {
@@ -99,7 +102,17 @@ public class Controller {
 
             ioFileInfo.outputFileName = outputFileNameID.getText();
 
-            programManager.manageInput(ioFileInfo);
+            try {
+                programManager.manageInput(ioFileInfo);
+            } catch (InvalidAlgorithmParameterException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidKeyException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 programManager.manageOutput(ioFileInfo);
             } catch (InvalidKeyException e) {

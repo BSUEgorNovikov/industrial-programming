@@ -1,8 +1,8 @@
 package com.example.maven_pp_javafx;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ProgramManager {
     public ProgramManager() throws NoSuchAlgorithmException {
     }
 
-    public void manageInput(IOFileInfo ioFileInfo) {
+    public void manageInput(IOFileInfo ioFileInfo) throws InvalidAlgorithmParameterException, IOException, NoSuchAlgorithmException, InvalidKeyException {
         PlainTextWorker ptw = new PlainTextWorker(ioFileInfo.inputFileName);
         List<String> gainData = new ArrayList<>();
 
@@ -44,15 +44,15 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "2" -> {
-                        //decryptFile()
+                        decryptFile(ioFileInfo);
                         gainData = ptw.readingFromPlain(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
                     }
                     case "3" -> {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
 
-                        ioFileInfo.inputFileName = "new_" + ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData;
-                        //decryptFileIfNeeds(ioFileInfo);
+                        ioFileInfo.inputFileName = unpackedfile;
+                        decryptFile(ioFileInfo);
 
                         gainData = ptw.readingFromPlain(unpackedfile);
 
@@ -60,7 +60,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "4" -> {
-                        //decryptFileIfNeeds(ioFileInfo);
+                        decryptArchive(ioFileInfo);
 
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
@@ -88,7 +88,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "2" -> {
-                        //decryptFile()
+                        decryptFile(ioFileInfo);
                         JsonSimpleParser parser = new JsonSimpleParser();
                         gainData = parser.parse(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
                     }
@@ -96,8 +96,8 @@ public class ProgramManager {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
 
-                        ioFileInfo.inputFileName = "new_" + ioFileInfo.inputFileName;
-                        //decryptFileIfNeeds(ioFileInfo);
+                        //ioFileInfo.inputFileName = unpackedfile;
+                        decryptFile(ioFileInfo);
 
                         JsonSimpleParser parser = new JsonSimpleParser();
                         gainData = parser.parse(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
@@ -106,7 +106,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "4" -> {
-                        //decryptFileIfNeeds(ioFileInfo);
+                        decryptArchive(ioFileInfo);
 
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
@@ -136,7 +136,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "2" -> {
-                        //decryptFile()
+                        decryptFile(ioFileInfo);
                         XmlParser xmlParser = new XmlParser();
                         gainData = xmlParser.parse(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
                     }
@@ -144,8 +144,8 @@ public class ProgramManager {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
 
-                        ioFileInfo.inputFileName = "new_" + ioFileInfo.inputFileName;
-                        //decryptFileIfNeeds(ioFileInfo);
+                        ioFileInfo.inputFileName = unpackedfile;
+                        decryptFile(ioFileInfo);
 
                         XmlParser xmlParser = new XmlParser();
                         gainData = xmlParser.parse(unpackedfile);
@@ -154,7 +154,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "4" -> {
-                        //decryptFileIfNeeds(ioFileInfo);
+                        decryptArchive(ioFileInfo);
 
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
@@ -206,7 +206,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "2" -> {
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                     }
                     case "3" -> {
                         ptw.writeInPlain(ioFileInfo.outputFileName + ".txt", vectorOfResults.toString());
@@ -217,10 +217,10 @@ public class ProgramManager {
                         fileToDelete.delete();
 
                         ioFileInfo.outputFileData = ioFileInfo.outArchveData;
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                     }
                     case "4" -> {
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                         ioFileInfo.outputFileData = "enc";
 
                         archiveFileWorker zfw = new archiveFileWorker();
@@ -245,7 +245,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "2" -> {
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                     }
                     case "3" -> {
                         JsonSimpleParser parser = new JsonSimpleParser();
@@ -257,10 +257,10 @@ public class ProgramManager {
                         fileToDelete.delete();
 
                         ioFileInfo.outputFileData = ioFileInfo.outArchveData;
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                     }
                     case "4" -> {
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                         ioFileInfo.outputFileData = "enc";
 
                         archiveFileWorker zfw = new archiveFileWorker();
@@ -286,7 +286,7 @@ public class ProgramManager {
                         fileToDelete.delete();
                     }
                     case "2" -> {
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                     }
                     case "3" -> {
                         XmlParser xmlParser = new XmlParser();
@@ -298,10 +298,10 @@ public class ProgramManager {
                         fileToDelete.delete();
 
                         ioFileInfo.outputFileData = ioFileInfo.outArchveData;
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                     }
                     case "4" -> {
-                        encryptFileIfNeeds(ioFileInfo);
+                        encryptFile(ioFileInfo);
                         ioFileInfo.outputFileData = "enc";
 
                         archiveFileWorker zfw = new archiveFileWorker();
@@ -319,7 +319,7 @@ public class ProgramManager {
     }
 
 
-    private void encryptFileIfNeeds(IOFileInfo ioFileInfo) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+    private void encryptFile(IOFileInfo ioFileInfo) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         String key = "secretkey1111111";
         SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
 
@@ -337,10 +337,31 @@ public class ProgramManager {
 
         String[] file_name_content = content.split("SEPARATOR");
 
-        File file = new File(file_name_content[0]);
-        file.createNewFile();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file_name_content[0]))) {
+            writer.write(file_name_content[1] + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(file_name_content[1]);
+    public void decryptArchive(IOFileInfo ioFileInfo) throws InvalidAlgorithmParameterException, IOException, InvalidKeyException {
+        String key = "secretkey1111111";
+        SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
+
+        FileEncrypterDecrypter cipher = new FileEncrypterDecrypter(secretKey, "AES/CBC/PKCS5Padding");
+        String content = cipher.decrypt(ioFileInfo.inputFileName + ".enc");
+
+        String[] file_name_content = content.split("SEPARATOR");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file_name_content[1]))) {
+            writer.write(file_name_content[2] + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        archiveFileWorker zfw = new archiveFileWorker();
+        zfw.archiveOutput(ioFileInfo.inputFileName, ioFileInfo.inputFileData, ioFileInfo.inArchveData);
+        File fileToDelete = new File(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
+        fileToDelete.delete();
     }
 }

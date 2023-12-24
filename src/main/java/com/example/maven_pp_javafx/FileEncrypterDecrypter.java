@@ -2,11 +2,9 @@ package com.example.maven_pp_javafx;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
@@ -63,7 +61,7 @@ public class FileEncrypterDecrypter {
         return content;
     }
 
-    void encryptInput(String inFileName, String inFileData) throws InvalidKeyException, IOException {
+    void encryptInputFile(String inFileName, String inFileData) throws InvalidKeyException, IOException {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] iv = cipher.getIV();
 
@@ -90,6 +88,45 @@ public class FileEncrypterDecrypter {
             {
                 System.out.println("Error" + e);
             }
+        }
+    }
+
+    void encryptInputArchive(String inFileName, String inFileData) throws InvalidKeyException, IOException {
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] iv = cipher.getIV();
+
+        try (FileOutputStream fileOut = new FileOutputStream(inFileName + ".enc");
+             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher)) {
+            fileOut.write(iv);
+
+            cipherOut.write(inFileName.getBytes());
+            cipherOut.write(".".getBytes());
+            cipherOut.write(inFileData.getBytes());
+            cipherOut.write("SEPARATOR".getBytes());
+
+            archiveFileWorker zfw = new archiveFileWorker();
+            String unpackedfile = zfw.archiveInput(inFileName + "." + inFileData);
+
+            cipherOut.write(unpackedfile.getBytes());
+            cipherOut.write("SEPARATOR".getBytes());
+
+            try
+            {
+                Scanner sc = new Scanner(new File(unpackedfile));
+
+                while(sc.hasNext())
+                {
+                    String tmpLine = sc.nextLine();
+                    cipherOut.write(tmpLine.getBytes());
+                }
+            }
+            catch (IOException e)
+            {
+                System.out.println("Error" + e);
+            }
+
+            File fileToDelete = new File(unpackedfile);
+            fileToDelete.delete();
         }
     }
 }
