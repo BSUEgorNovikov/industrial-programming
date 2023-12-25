@@ -51,10 +51,10 @@ public class ProgramManager {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
 
-                        ioFileInfo.inputFileName = unpackedfile;
+                        //ioFileInfo.inputFileName = unpackedfile;
                         decryptFile(ioFileInfo);
 
-                        gainData = ptw.readingFromPlain(unpackedfile);
+                        gainData = ptw.readingFromPlain(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
 
                         File fileToDelete = new File(unpackedfile);
                         fileToDelete.delete();
@@ -124,7 +124,7 @@ public class ProgramManager {
                 }
             }
             case "xml" -> {
-                switch (ioFileInfo.outputEncryptionMethod) {
+                switch (ioFileInfo.inputEncryptionMethod) {
                     case "1" -> {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
@@ -144,11 +144,12 @@ public class ProgramManager {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
 
-                        ioFileInfo.inputFileName = unpackedfile;
+                        //ioFileInfo.inputFileName = unpackedfile;
+                        //ioFileInfo.inputFileName = ioFileInfo.inputFileName.substring(0, ioFileInfo.inputFileName.length() - 4);
                         decryptFile(ioFileInfo);
 
                         XmlParser xmlParser = new XmlParser();
-                        gainData = xmlParser.parse(unpackedfile);
+                        gainData = xmlParser.parse(ioFileInfo.inputFileName + "." + ioFileInfo.inputFileData);
 
                         File fileToDelete = new File(unpackedfile);
                         fileToDelete.delete();

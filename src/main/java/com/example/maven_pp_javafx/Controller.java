@@ -52,9 +52,13 @@ public class Controller {
 
     @FXML
     void initialize() throws NoSuchAlgorithmException {
-        programManager = new ProgramManager();
-
         processButton.setOnAction(event -> {
+            try {
+                programManager = new ProgramManager();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+
             RadioButton selectedInputType = (RadioButton) inputDataType.getSelectedToggle();
             if(selectedInputType != null) {
                 ioFileInfo.inputFileData = selectedInputType.getText();

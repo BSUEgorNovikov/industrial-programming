@@ -34,7 +34,9 @@ public class PlainTextWorker {
             String tmpLine;
             while((tmpLine = br.readLine()) != null)
             {
-                gainData.add(tmpLine);
+                String[] expressions = tmpLine.split(";");
+                for (int i = 0; i < expressions.length; i++)
+                    gainData.add(expressions[i]);
             }
         }
         catch (IOException e)
