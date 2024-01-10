@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Информация о файлах</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .column {
+            width: 30%;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .radio-input {
+            width: 10%;
+        }
+
+        .calc-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="column">
+    <h2>Информация о входном файле:</h2>
+    <h3>Введите имя файла или полный путь до файла (без расширения)</h3>
+    <input type="text" name="inputFileName">
+
+    <h3>Выберите расширение файла</h3>
+    <input class="radio-input" type="radio" name="inputFileData" value="txt"> txt
+    <input class="radio-input" type="radio" name="inputFileData" value="json"> json
+    <input class="radio-input" type="radio" name="inputFileData" value="xml"> xml
+
+    <h3>Выберите подходящий вариант архивации/шифрования для входного файла</h3>
+    <input class="radio-input" type="radio" name="inputEncryptionMethod" value="1"> Только заархивирован
+    <input class="radio-input" type="radio" name="inputEncryptionMethod" value="2"> Только зашифрован
+    <input class="radio-input" type="radio" name="inputEncryptionMethod" value="3"> Сначала заархивирован, потом зашифрован
+    <input class="radio-input" type="radio" name="inputEncryptionMethod" value="4"> Сначала зашифрован, потом заархивирован
+    <input class="radio-input" type="radio" name="inputEncryptionMethod" value="5"> Ни зашифрован, ни заархивирован
+
+    <h3>Выберите тип архива:</h3>
+    <input class="radio-input" type="radio" name="inputArchiveData" value="zip"> zip
+    <input class="radio-input" type="radio" name="inputArchiveData" value="rar"> rar
+</div>
+
+<div class="column">
+    <h3>Выберите номер метода, которым хотите произвести подсчёт выражений:</h3>
+    <input class="radio-input" type="radio" name="countMethod" value="manual"> Ручной
+    <input class="radio-input" type="radio" name="countMethod" value="regex"> С помощью регулярных выражений
+    <input class="radio-input" type="radio" name="countMethod" value="library"> С помощью сторонней библиотеки
+    <br><br><br>
+    <a class="calc-button" href="/calculate">Вычислить</a>
+</div>
+
+<div class="column">
+    <h2>Информация о выходном файле:</h2>
+    <h3>Введите имя файла или полный путь до файла (без расширения)</h3>
+    <input type="text" name="outputFileName">
+
+    <h3>Выберите расширение файла</h3>
+    <input class="radio-input" type="radio" name="outputFileExtension" value="txt"> txt
+    <input class="radio-input" type="radio" name="outputFileExtension" value="json"> json
+    <input class="radio-input" type="radio" name="outputFileExtension" value="xml"> xml
+
+    <h3>Выберите подходящий вариант архивации/шифрования для выходного файла</h3>
+    <input class="radio-input" type="radio" name="outputEncryptionMethod" value="1"> Только заархивирован
+    <input class="radio-input" type="radio" name="outputEncryptionMethod" value="2"> Только зашифрован
+    <input class="radio-input" type="radio" name="outputEncryptionMethod" value="3"> Сначала заархивирован, потом зашифрован
+    <input class="radio-input" type="radio" name="outputEncryptionMethod" value="4"> Сначала зашифрован, потом заархивирован
+    <input class="radio-input" type="radio" name="outputEncryptionMethod" value="5"> Ни зашифрован, ни заархивирован
+
+    <h3>Выберите тип архива:</h3>
+    <input class="radio-input" type="radio" name="outputArchiveData" value="zip"> zip
+    <input class="radio-input" type="radio" name="outputArchiveData" value="rar"> rar
+</div>
+</body>
+</html>
