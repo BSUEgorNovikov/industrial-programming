@@ -17,6 +17,6 @@ class XmlParserTest {
         expected.add("4 * (5 - 6) / 3");
 
         XmlParser parser = new XmlParser();
-        assertEquals(expected, parser.parse("test_input.xml"));
+        assertEquals(expected, parser.parse("xml_input.xml"));
     }
 }

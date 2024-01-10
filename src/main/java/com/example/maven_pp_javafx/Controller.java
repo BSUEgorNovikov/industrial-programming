@@ -51,83 +51,73 @@ public class Controller {
     }
 
     @FXML
-    void initialize() throws NoSuchAlgorithmException {
+    void initialize() throws NoSuchAlgorithmException, InterruptedException {
         processButton.setOnAction(event -> {
             try {
+                message.setOpacity(0);
+
                 programManager = new ProgramManager();
+
+                RadioButton selectedInputType = (RadioButton) inputDataType.getSelectedToggle();
+                if(selectedInputType != null) {
+                    ioFileInfo.inputFileData = selectedInputType.getText();
+                }
+
+                selectedInputType = (RadioButton) outputDataType.getSelectedToggle();
+                if(selectedInputType != null) {
+                    ioFileInfo.outputFileData = selectedInputType.getText();
+                }
+
+                selectedInputType = (RadioButton) calcMethod.getSelectedToggle();
+                if(selectedInputType != null) {
+                    if (selectedInputType.getText().equals("Собственно-написанный калькулятор")) {
+                        ioFileInfo.numberOfCalculationMethod = "1";
+                    }
+                    else if (selectedInputType.getText().equals("Калькулятор на рег. выражениях")) {
+                        ioFileInfo.numberOfCalculationMethod = "2";
+                    }
+                    else if (selectedInputType.getText().equals("Сторонняя библиотека")) {
+                        ioFileInfo.numberOfCalculationMethod = "3";
+                    }
+                }
+
+                selectedInputType = (RadioButton) inputEncryptionMethod.getSelectedToggle();
+                if(selectedInputType != null) {
+                    ioFileInfo.inputEncryptionMethod = String.valueOf(selectedInputType.getText().charAt(0));
+                }
+
+                selectedInputType = (RadioButton) outputEncryptionMethod.getSelectedToggle();
+                if(selectedInputType != null) {
+                    ioFileInfo.outputEncryptionMethod = String.valueOf(selectedInputType.getText().charAt(0));
+                }
+
+                selectedInputType = (RadioButton) inputArchiveType.getSelectedToggle();
+                if(selectedInputType != null) {
+                    ioFileInfo.inArchveData = selectedInputType.getText();
+                }
+
+                selectedInputType = (RadioButton) outputArchiveType.getSelectedToggle();
+                if(selectedInputType != null) {
+                    ioFileInfo.outArchveData = selectedInputType.getText();
+                }
+
+                ioFileInfo.inputFileName = inputFileNameID.getText();
+
+                ioFileInfo.outputFileName = outputFileNameID.getText();
+
+                programManager.manageInput(ioFileInfo);
+                programManager.manageOutput(ioFileInfo);
+
+                //message.setOpacity(1);
             } catch (NoSuchAlgorithmException e) {
                 throw new RuntimeException(e);
-            }
-
-            RadioButton selectedInputType = (RadioButton) inputDataType.getSelectedToggle();
-            if(selectedInputType != null) {
-                ioFileInfo.inputFileData = selectedInputType.getText();
-            }
-
-            selectedInputType = (RadioButton) outputDataType.getSelectedToggle();
-            if(selectedInputType != null) {
-                ioFileInfo.outputFileData = selectedInputType.getText();
-            }
-
-            selectedInputType = (RadioButton) calcMethod.getSelectedToggle();
-            if(selectedInputType != null) {
-                if (selectedInputType.getText().equals("Собственно-написанный калькулятор")) {
-                    ioFileInfo.numberOfCalculationMethod = "1";
-                }
-                else if (selectedInputType.getText().equals("Калькулятор на рег. выражениях")) {
-                    ioFileInfo.numberOfCalculationMethod = "2";
-                }
-                else if (selectedInputType.getText().equals("Сторонняя библиотека")) {
-                    ioFileInfo.numberOfCalculationMethod = "3";
-                }
-            }
-
-            selectedInputType = (RadioButton) inputEncryptionMethod.getSelectedToggle();
-            if(selectedInputType != null) {
-                ioFileInfo.inputEncryptionMethod = String.valueOf(selectedInputType.getText().charAt(0));
-            }
-
-            selectedInputType = (RadioButton) outputEncryptionMethod.getSelectedToggle();
-            if(selectedInputType != null) {
-                ioFileInfo.outputEncryptionMethod = String.valueOf(selectedInputType.getText().charAt(0));
-            }
-
-            selectedInputType = (RadioButton) inputArchiveType.getSelectedToggle();
-            if(selectedInputType != null) {
-                ioFileInfo.inArchveData = selectedInputType.getText();
-            }
-
-            selectedInputType = (RadioButton) outputArchiveType.getSelectedToggle();
-            if(selectedInputType != null) {
-                ioFileInfo.outArchveData = selectedInputType.getText();
-            }
-
-            ioFileInfo.inputFileName = inputFileNameID.getText();
-
-            ioFileInfo.outputFileName = outputFileNameID.getText();
-
-            try {
-                programManager.manageInput(ioFileInfo);
             } catch (InvalidAlgorithmParameterException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
             } catch (InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
-            try {
-                programManager.manageOutput(ioFileInfo);
-            } catch (InvalidKeyException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
-
-            message.setVisible(true);
         });
     }
 

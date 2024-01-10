@@ -104,18 +104,15 @@ public class XmlParser {
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.newDocument();
 
-            // Создаем корневой элемент
             Element rootElement = document.createElement("Results");
             document.appendChild(rootElement);
 
-            // Добавляем элементы из вектора в XML
             for (Double result : results) {
                 Element resultElement = document.createElement("Result");
                 resultElement.appendChild(document.createTextNode(result.toString()));
                 rootElement.appendChild(resultElement);
             }
 
-            // Сохраняем документ в XML-файл
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(document);

@@ -25,13 +25,6 @@ public class ProgramManager {
         List<String> gainData = new ArrayList<>();
 
         switch (ioFileInfo.inputFileData) {
-//            case "zip", "rar" -> {
-//                archiveFileWorker zfw = new archiveFileWorker();
-//                String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName);
-//
-//                ptw = new PlainTextWorker(unpackedfile);
-//                gainData = ptw.readingFromPlain(unpackedfile);
-//            }
             case "txt" -> {
                 switch (ioFileInfo.inputEncryptionMethod) {
                     case "1" -> {
@@ -144,8 +137,6 @@ public class ProgramManager {
                         archiveFileWorker zfw = new archiveFileWorker();
                         String unpackedfile = zfw.archiveInput(ioFileInfo.inputFileName + "." + ioFileInfo.inArchveData);
 
-                        //ioFileInfo.inputFileName = unpackedfile;
-                        //ioFileInfo.inputFileName = ioFileInfo.inputFileName.substring(0, ioFileInfo.inputFileName.length() - 4);
                         decryptFile(ioFileInfo);
 
                         XmlParser xmlParser = new XmlParser();

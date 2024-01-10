@@ -17,7 +17,7 @@ class PlainTextWorkerTest {
         expected.add("4 * (5 - 6) / 3");
         expected.add("0.56 + 0.2 * 4");
 
-        PlainTextWorker ptw = new PlainTextWorker("input.txt");
-        assertEquals(expected, ptw.readingFromPlain("input.txt"));
+        PlainTextWorker ptw = new PlainTextWorker("txt_input.txt");
+        assertEquals(expected, ptw.readingFromPlain("txt_input.txt"));
     }
 }

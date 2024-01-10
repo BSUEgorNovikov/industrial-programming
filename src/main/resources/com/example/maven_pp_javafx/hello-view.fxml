@@ -69,13 +69,13 @@
       </VBox>
       <VBox alignment="CENTER" prefHeight="506.0" prefWidth="333.0">
          <children>
-            <Label fx:id="message" alignment="CENTER" contentDisplay="TOP" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="461.0" prefWidth="188.0" text="Указанный файл обработан! Чтобы обработать ещё файл, введите данные про новый входной файл" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="message" alignment="CENTER" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.0" prefHeight="461.0" prefWidth="188.0" text="Указанный файл обработан! Чтобы обработать ещё файл, введите данные про новый входной файл" textAlignment="CENTER" wrapText="true" />
             <Button fx:id="processButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="188.0" text="Обработать файл" />
          </children>
       </VBox>
       <VBox alignment="BASELINE_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="384.0" prefWidth="453.0">
          <children>
-            <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Входной файл:">
+            <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Выходной файл:">
                <font>
                   <Font size="20.0" />
                </font>

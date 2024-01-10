@@ -14,7 +14,7 @@ public class archiveFileWorker {
             String name;
             while((entry=zin.getNextEntry())!=null) {
 
-                name = entry.getName(); // получим название файла
+                name = entry.getName();
                 System.out.printf("File name: %s \n", name);
 
                 //unpackedFile = "new_" + name;
@@ -41,16 +41,12 @@ public class archiveFileWorker {
         {
             ZipEntry entry1=new ZipEntry(fileName + "." + outType);
             zout.putNextEntry(entry1);
-            // считываем содержимое файла в массив byte
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
-            // добавляем содержимое к архиву
             zout.write(buffer);
-            // закрываем текущую запись для новой записи
             zout.closeEntry();
         }
         catch(Exception ex){
-
             System.out.println(ex.getMessage());
         }
     }

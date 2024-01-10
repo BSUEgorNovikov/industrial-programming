@@ -19,21 +19,20 @@ public class Main
 
         cli.intro();
 
-        while (cli.isContinueWorking()) {
-            cli.inputFileInfo(ioFileInfo);
+        switch (cli.realizationMethod) {
+            case "CLI" -> {
+                while (cli.isContinueWorking()) {
+                    cli.inputFileInfo(ioFileInfo);
 
-            programManager.manageInput(ioFileInfo);
-            programManager.manageOutput(ioFileInfo);
+                    programManager.manageInput(ioFileInfo);
+                    programManager.manageOutput(ioFileInfo);
 
-            cli.finishOrContinue();
+                    cli.finishOrContinue();
+                }
+            }
+            case "UI" -> {
+                ExpressionsApplication.main(args);
+            }
         }
-
-//        String key = "secretkey1111111";
-//        SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
-//        FileEncrypterDecrypter cipher = new FileEncrypterDecrypter(secretKey, "AES/CBC/PKCS5Padding");
-//
-//        cipher.encryptInputArchive("enc_zip_txt_input", "zip");
-//        String content = cipher.decrypt("enc_zip_txt_input.enc");
-//        System.out.println(content);
     }
 }
